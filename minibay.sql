@@ -1,7 +1,13 @@
  ---------------------------------------------------------------
  --        Script Oracle.  
  ---------------------------------------------------------------
+drop table AUCTION cascade constraint purge;
+drop table BID cascade constraint purge;
+drop table USERS cascade constraint purge;
 
+drop sequence MOUVEMENT_ID;
+drop sequence AUCTION_ID;
+drop sequence BID_ID;
 CREATE TABLE USERS(
 	pseudo      VARCHAR2 (25) NOT NULL  ,
 	pass        VARCHAR2 (25) NOT NULL  ,
@@ -70,7 +76,7 @@ CREATE OR REPLACE TRIGGER AUCTION_ID
 	BEGIN
 		 select Seq_AUCTION_ID.NEXTVAL INTO :NEW.ID from DUAL; 
 	END;
-
+/
 CREATE OR REPLACE TRIGGER BID_ID
 	BEFORE INSERT ON BID 
   FOR EACH ROW 
@@ -78,7 +84,7 @@ CREATE OR REPLACE TRIGGER BID_ID
 	BEGIN
 		 select Seq_BID_ID.NEXTVAL INTO :NEW.ID from DUAL; 
 	END;
-
+/
 CREATE OR REPLACE TRIGGER MOUVEMENT_ID
 	BEFORE INSERT ON MOUVEMENT 
   FOR EACH ROW 
@@ -86,5 +92,6 @@ CREATE OR REPLACE TRIGGER MOUVEMENT_ID
 	BEGIN
 		 select Seq_MOUVEMENT_ID.NEXTVAL INTO :NEW.ID from DUAL; 
 	END;
+/
 
-
+COMMIT;
