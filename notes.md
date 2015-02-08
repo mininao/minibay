@@ -1,4 +1,0 @@
-# Notes minibay
-
-# User
- *
