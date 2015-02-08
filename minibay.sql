@@ -6,7 +6,7 @@
 
 
  -- Drop table if already exists -- see http://stackoverflow.com/questions/1799128/oracle-if-table-exists
-  BEGIN
+  BEGIN -- Drop auction
      EXECUTE IMMEDIATE 'DROP TABLE AUCTION';
   EXCEPTION
      WHEN OTHERS THEN
@@ -14,16 +14,16 @@
            RAISE;
         END IF;
   END;
- 
-  BEGIN --Drop bid
-     EXECUTE IMMEDIATE 'DROP TABLE BID';
+ /
+  BEGIN --Drop mouvement
+     EXECUTE IMMEDIATE 'DROP TABLE MOUVEMENT';
   EXCEPTION
      WHEN OTHERS THEN
         IF SQLCODE != -942 THEN
            RAISE;
         END IF;
   END;
-
+  /
   BEGIN --Drop users
      EXECUTE IMMEDIATE 'DROP TABLE USERS';
   EXCEPTION
@@ -32,7 +32,7 @@
            RAISE;
         END IF;
   END;
-  
+  /
   BEGIN --Drop datation
      EXECUTE IMMEDIATE 'DROP TABLE DATATION';
   EXCEPTION
@@ -41,7 +41,12 @@
            RAISE;
         END IF;
   END;
-  
+  /
+
+-- Drop sequences
+drop sequence SEQ_AUCTION_ID;
+drop sequence SEQ_MOUVEMENT_ID;
+
   CREATE TABLE USERS (
     pseudo      VARCHAR2 (25) NOT NULL  ,
     pass        VARCHAR2 (25) NOT NULL  ,
@@ -95,7 +100,23 @@
   CREATE SEQUENCE Seq_AUCTION_ID START WITH 1 INCREMENT BY 1 NOCYCLE;
   CREATE SEQUENCE Seq_MOUVEMENT_ID START WITH 1 INCREMENT BY 1 NOCYCLE;
   
-  
+CREATE OR REPLACE TRIGGER AUCTION_ID
+	BEFORE INSERT ON AUCTION 
+  FOR EACH ROW 
+	WHEN (NEW.ID IS NULL) 
+	BEGIN
+		 select Seq_AUCTION_ID.NEXTVAL INTO :NEW.ID from DUAL; 
+	END;
+/
+
+CREATE OR REPLACE TRIGGER MOUVEMENT_ID
+	BEFORE INSERT ON MOUVEMENT 
+  FOR EACH ROW 
+	WHEN (NEW.ID IS NULL) 
+	BEGIN
+		 select Seq_MOUVEMENT_ID.NEXTVAL INTO :NEW.ID from DUAL; 
+	END;
+/
 
 COMMIT;
 
