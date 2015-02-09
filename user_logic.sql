@@ -2,17 +2,32 @@
 -- Logique Stockée des utilisateurs (Connexion & Inscription)
 -------------------------------------------------------------
 
+--datation
+Create Or Replace Function today Return DATE AS
+todate DATE;
+BEGIN
+SELECT today INTO todate FROM datation WHERE ROWNUM <= 1;
+return todate;
+END;
+/
+
 -- signin(Pseudo,Password)
 -- returns 0 if successful
--- returns 1 if pseudo or password not found
+-- returns 1 if pseudo is incorrect
+-- returns 2 if pass is incorrect
 CREATE OR REPLACE FUNCTION signin(upseudo IN VARCHAR2, upass IN VARCHAR2) RETURN INTEGER AS
 useless VARCHAR2(25);
+pc INTEGER;
 BEGIN
+  SELECT count(pseudo) INTO pc FROM USERS WHERE PSEUDO=upseudo;
+  If pc = 0 Then
+    Return 1;
+  End If;
   SELECT pseudo INTO useless FROM USERS WHERE PSEUDO=upseudo AND PASS=upass;
   RETURN 0;
   EXCEPTION
   WHEN no_data_found THEN
-  RETURN 1;
+  RETURN 2;
 END;
 /
 

@@ -23,6 +23,15 @@ DECLARE
   output INTEGER;
 BEGIN
   dbms_output.put_line('1. Signin test: should return 1');
+  SELECT chabertc.signin('fransssscis','papapapa') INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('1. Signin test: should return 2');
   SELECT chabertc.signin('francis','papapapa') INTO output FROM dual;
   dbms_output.put_line(output);
 END;
@@ -149,6 +158,9 @@ BEGIN
   dbms_output.put_line(output);
 END;
 /
+
+-- Test view liste_ventes
+SELECT * FROM chabertc.liste_ventes;
 
   -- MONEY_LOGIC.SQL TESTS
  -- 
