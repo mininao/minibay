@@ -75,14 +75,14 @@ drop sequence SEQ_MOUVEMENT_ID;
     ID              NUMBER NOT NULL ,
     description         VARCHAR2(1000),
     date_mouvement  DATE  NOT NULL  ,
-    amout_received     NUMBER(19, 3)  NOT NULL ,--null if wire transfer
-    amout_sent     NUMBER(19, 3)   ,
+    amount_received     NUMBER(19, 3)  NOT NULL ,--null if deposit
+    amount_sent     NUMBER(19, 3)   ,
     commission      NUMBER(19, 3)  NOT NULL ,
-    wire_transfer   NUMBER (1) NOT NULL  ,
+    deposit   NUMBER (1) NOT NULL  ,
     receiver_pseudo    VARCHAR2 (25) NOT NULL  ,
-    sender_pseudo    VARCHAR2 (25)  , --null if wire transfer
+    sender_pseudo    VARCHAR2 (25)  , --null if deposit
     CONSTRAINT MOUVEMENT_Pk PRIMARY KEY (ID) ,
-    CONSTRAINT CHK_BOOLEAN_wire_transfer CHECK (wire_transfer IN (0,1))
+    CONSTRAINT CHK_BOOLEAN_deposit CHECK (deposit IN (0,1))
   );
   CREATE TABLE datation(
     today  DATE  NOT NULL  ,
@@ -122,14 +122,16 @@ CREATE OR REPLACE TRIGGER MOUVEMENT_ID
 INSERT INTO USERS(PSEUDO,PASS,FIRST_NAME,LAST_NAME,ADDRESS,ZIP,BALANCE,DATE_BIRTH) VALUES ('johnny','azerty','Johnny','Martin','78 Rue du Faubourg Saint Honoré','75001',0,to_date('23/09/1997','DD/MM/YYYY')); -- Date of birth necessary according to scpecifications
 
 INSERT INTO USERS(PSEUDO,PASS,FIRST_NAME,LAST_NAME,ADDRESS,ZIP,BALANCE,DATE_BIRTH) VALUES ('francis','azerty','Francis','Dumas','79 Rue Francis','75002',27500,to_date('24/09/1997','DD/MM/YYYY')); -- Date of birth necessary according to scpecifications
-INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUT_RECEIVED,COMMISSION,WIRE_TRANSFER,RECEIVER_PSEUDO) VALUES (to_date('01/01/2013','DD/MM/YYYY'),18000,0,1,'francis');
-INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUT_RECEIVED,COMMISSION,WIRE_TRANSFER,RECEIVER_PSEUDO) VALUES (to_date('02/5/2013','DD/MM/YYYY'),9500,0,1,'francis');
+INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUNT_RECEIVED,COMMISSION,DEPOSIT,RECEIVER_PSEUDO) VALUES (to_date('01/01/2013','DD/MM/YYYY'),18000,0,1,'francis');
+INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUNT_RECEIVED,COMMISSION,DEPOSIT,RECEIVER_PSEUDO) VALUES (to_date('02/5/2013','DD/MM/YYYY'),9500,0,1,'francis');
 
 INSERT INTO USERS(PSEUDO,PASS,FIRST_NAME,LAST_NAME,ADDRESS,ZIP,BALANCE,DATE_BIRTH) VALUES ('estelle','azerty','Estelle','Lefebvre','80 Rue Estelle','75003',30000,to_date('25/09/1997','DD/MM/YYYY')); -- Date of birth necessary according to scpecifications
-INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUT_RECEIVED,COMMISSION,WIRE_TRANSFER,RECEIVER_PSEUDO) VALUES (to_date('01/03/2013','DD/MM/YYYY'),30000,0,1,'estelle');
+INSERT INTO MOUVEMENT(DATE_MOUVEMENT,AMOUNT_RECEIVED,COMMISSION,DEPOSIT,RECEIVER_PSEUDO) VALUES (to_date('01/03/2013','DD/MM/YYYY'),30000,0,1,'estelle');
 
 INSERT INTO AUCTION(NAME,DEADLINE,INITIAL_PRICE,SELLER_PSEUDO,BUYER_PSEUDO,CURRENT_PRICE) VALUES ('Harley Davidson',TO_DATE('25/05/2013','DD/MM/YYYY'),25000,'johnny','francis',26000); -- Date of submission not mandatory accorting to specs
 INSERT INTO AUCTION(NAME,DEADLINE,INITIAL_PRICE,SELLER_PSEUDO,BUYER_PSEUDO,CURRENT_PRICE) VALUES ('Audi A3',TO_DATE('01/07/2013','DD/MM/YYYY'),12900,'francis','estelle',12900);
+
+INSERT INTO DATATION VALUES (to_date('25/06/2013','DD/MM/YYYY'));
 COMMIT;
 
 
