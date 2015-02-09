@@ -58,9 +58,14 @@ END;
  -- AUCTION_LOGIC.SQL TESTS
  -- 
  
- --TODO
- 
- 
+ DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('1. Propose Auction test: should return 0');
+  SELECT chabertc.propose_auction('francis','azerty','Bouteille de coca','Bouteille originale dessinée par picasso','15/6/2015',1000) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
   -- MONEY_LOGIC.SQL TESTS
  -- 
  
@@ -68,7 +73,7 @@ END;
   output INTEGER;
 BEGIN
   dbms_output.put_line('1. Transfer test: should return 0');
-  SELECT chabertc.transfer('francis','estelle','x','x','x',to_date('22/12/1902','DD/MM/YYYY'),93250) INTO output FROM dual;
+  SELECT chabertc.transfer('francis','estelle','description du transfert',500) INTO output FROM dual;
   dbms_output.put_line(output);
 END;
 /
