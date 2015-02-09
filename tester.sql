@@ -12,6 +12,7 @@ set serveroutput on;
 DECLARE
   output INTEGER;
 BEGIN
+  dbms_output.put_line('-------- BEGIN TESTS --------');
   dbms_output.put_line('1. Signin test: should return 0');
   SELECT chabertc.signin('francis','azerty') INTO output FROM dual;
   dbms_output.put_line(output);
@@ -55,6 +56,42 @@ END;
 /
 
 
+DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('3. Balance test: should return 27500');
+  SELECT chabertc.balance('francis','azerty') INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('3. Balance test: should return -1');
+  SELECT chabertc.balance('francis','pipo') INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+DECLARE
+  output user_profile;
+BEGIN
+  dbms_output.put_line('4. Profile test: should return "francis et 79 Rue Francis  et 75002"');
+  SELECT chabertc.profile('francis','azerty') INTO output FROM dual;
+  dbms_output.put_line(output.pseudo || ' et ' || output.address || '  et ' || output.zip);
+END;
+/
+
+DECLARE
+  output user_profile;
+BEGIN
+  dbms_output.put_line('4. Profile test: should return "  et  et  "');
+  SELECT chabertc.profile('francis','dddy') INTO output FROM dual;
+  dbms_output.put_line(output.pseudo || ' et ' || output.address || '  et ' || output.zip);
+END;
+/
+
  -- AUCTION_LOGIC.SQL TESTS
  -- 
  
@@ -66,13 +103,60 @@ BEGIN
   dbms_output.put_line(output);
 END;
 /
-  -- MONEY_LOGIC.SQL TESTS
- -- 
+
  
  DECLARE
   output INTEGER;
 BEGIN
-  dbms_output.put_line('1. Transfer test: should return 0');
+  dbms_output.put_line('2. Bid test: should return 0');
+  SELECT chabertc.bid('estelle','azerty',1,30000) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+ DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('2. Bid test: should return 1');
+  SELECT chabertc.bid('estelle','xxxx',1,30000) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+ DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('2. Bid test: should return 2');
+  SELECT chabertc.bid('estelle','azerty',1,200) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+ DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('2. Bid test: should return 4');
+  SELECT chabertc.bid('estelle','azerty',99999,30000) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+ DECLARE
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('2. Bid test: should return 5');
+  SELECT chabertc.bid('estelle','azerty',1,999999) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+  -- MONEY_LOGIC.SQL TESTS
+ -- 
+ 
+ DECLARE -- TEST TO BE TESTED AS DBA
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('1. Transfer test: should return 0 | EXECUTE AS DBA');
   SELECT chabertc.transfer('francis','estelle','description du transfert',500) INTO output FROM dual;
   dbms_output.put_line(output);
 END;
