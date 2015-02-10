@@ -48,7 +48,10 @@ sync.fiber(function () {
   
   _.each(auctionList,function(row){
     var auctionTimeLeft = moment.duration(moment(row.DEADLINE).diff(dbDate));
-    auctionTable.push([row.ID,row.NAME,row.CURRENT_PRICE + " €",row.SELLER_PSEUDO,row.INITIAL_PRICE + " €",auctionTimeLeft.humanize()]);
+    if(!_.isNull(row.CURRENT_PRICE))
+      auctionTable.push([row.ID,row.NAME,row.CURRENT_PRICE + " €",row.SELLER_PSEUDO,row.INITIAL_PRICE + " €",auctionTimeLeft.humanize()]);
+    else
+      auctionTable.push([row.ID,row.NAME,row.INITIAL_PRICE + " €",row.SELLER_PSEUDO,row.INITIAL_PRICE + " €",auctionTimeLeft.humanize()]);
 
   });
 
@@ -72,7 +75,7 @@ sync.fiber(function () {
     if(answer.menu == "Enchérir"){
       bid(auctionList,currentBalance);
     } else if(answer.menu == "Proposer une enchère") {
-      bid(auctionList)
+      propose()
     } else if(answer.menu == "Mon compte") {
 
     } else if(answer.menu == "Quitter") {
@@ -129,16 +132,31 @@ var bid = function(auctionList,currentBalance){
 var propose =function(){
       var answer = u.promptSync([ // TODO : Check user input
       {type:"input",name:"name",message:"Entrez un nom pour l'enchère"},
-      {type:"input",name:"firstName",message:"Prénom"},
-      {type:"input",name:"lastName",message:"Nom"},
-      {type:"input",name:"address",message:"Adresse du domicile"},
-      {type:"input",name:"zip",message:"Code postal du domicile"},
-      {type:"input",name:"dob",message:"Date de naissance au format JJ/MM/AAAA"},
-      {type:"input",name:"email",message:"Email (facultatif)"},
-      {type:"input",name:"phone",message:"Numéro de téléhpone (facultatif)"}
+      {type:"input",name:"price",message:"Entrez un prix"},
+      {type:"input",name:"desc",message:"Entrez une description"},
+      {type:"input",name:"deadline",message:"Entrez une date limite au format JJ/MM/AAAA"}
     ]);
+  answer.price = parseFloat(answer.price);
+  var confirm = u.promptSync([{
+    type:"confirm",
+    name:"do",
+    message:"Créer l'enchère \"" + chalk.cyan(answer.name) + "\" à " + chalk.cyan(answer.price + " €") +  " ?"
+  }]);
+  if(confirm.do) {
+    
+    var qres = sync.await(connection.execute("SELECT chabertc.propose_auction(:pseudo,:password,:name,:description,to_date(:deadline,'DD/MM/YYYY'),:price) FROM dual",
+                                             [pseudo,password,answer.name,answer.desc,answer.deadline,answer.price],{outFormat: oracledb.ARRAY},sync.defer())).rows[0][0]
+    if(qres == 0) {
+      console.log(chalk.green.bold("Vous avez créé une enchère avec succès !"))
+    } else {
+      u.fatal("Erreur inconnue lors de l'enchère.")
+    }
+  }
 }
 
+var profile = function(){
+  
+}
 
 var sign = function(){
   answer = u.promptSync([
