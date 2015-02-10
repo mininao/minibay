@@ -50,6 +50,7 @@ BEGIN
   WHEN OTHERS THEN
   dbms_output.put_line(SQLCODE);
   dbms_output.put_line(SQLERRM);
+  RAISE;
   RETURN 2;
 END;
 /
