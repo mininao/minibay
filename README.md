@@ -7,7 +7,11 @@ Toute la partie sql se situe dans la branche "dba" : https://github.com/mininao/
 
 ## Installation
 
+(Assuming you've already installed nodejs & npm in their latest versions)
+
+
 1. Install Oracle SQL Instant client (see https://github.com/oracle/node-oracledb/blob/master/INSTALL.md OR http://dbaworkshop.blogspot.fr/2013/07/How-to-install-Oracle-Instant-Client-12c-and-Oracle-SQL-Plus-12c-on-Ubuntu.html for ubuntu )
-2. do `npm install`
-3. Just do "node index.js" to start !
+2. Use the script `tunnel.sh` to establish a connection with the server
+3. Do `npm install`
+4. Just do "node index.js" to start !
 
