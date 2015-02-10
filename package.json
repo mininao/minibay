@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/mininao/minibay/issues"
   },
-  "homepage": "https://github.com/mininao/minibay"
+  "homepage": "https://github.com/mininao/minibay",
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "cli-table": "^0.3.1",
+    "inquirer": "^0.8.0",
+    "lodash": "^3.1.0",
+    "moment": "^2.9.0",
+    "synchronize": "^0.9.9"
+  }
 }
