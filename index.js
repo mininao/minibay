@@ -23,9 +23,9 @@ sync.fiber(function () {
   console.log(chalk.green("Connected !"));
   
 
-  //sign()
-  pseudo = "francis";
-  password="azerty";
+  sign()
+  //pseudo = "francis";
+  //password="azerty";
   // Utilisateur maintenant connecté, affichage des enchères en cours
  
   
@@ -77,7 +77,7 @@ sync.fiber(function () {
     } else if(answer.menu == "Proposer une enchère") {
       propose()
     } else if(answer.menu == "Mon compte") {
-
+      profile()
     } else if(answer.menu == "Quitter") {
       u.cls();
       console.log(chalk.magenta.bold("Merci d'avoir utilisé minibay, à bientôt !"));
@@ -155,7 +155,43 @@ var propose =function(){
 }
 
 var profile = function(){
+  var currentBalance = sync.await(connection.execute("SELECT chabertc.balance(:pseudo,:password) FROM dual",[pseudo,password],{outFormat: oracledb.ARRAY},sync.defer())).rows[0][0]
+  u.cls()
+  console.log(chalk.cyan("Bonjour, " + pseudo + ". Vous disposez actuellement de  " + currentBalance + " €"))
   
+  var mTable = new Table({
+    head: ['Type', 'Commentaire','Montant','Transféré avec','Comission de minibay','Date']
+  });
+
+  
+  var mList = sync.await(connection.execute("SELECT * FROM table(chabertc.get_mouvements(:pseudo,:password))",[pseudo,password],{outFormat: oracledb.OBJECT},sync.defer()))
+  mList = mList.rows;
+
+  
+  _.each(mList,function(row){
+    var mDate = moment(row.DATE_MOUVEMENT);
+    if(_.isNull(row.DESCRIPTION)) row.DESCRIPTION = ""
+    if(row.DEPOSIT == 1)
+      mTable.push(["Dépot",row.DESCRIPTION,row.AMOUNT_RECEIVED + " €","-","0 €",mDate.format("Do MMMM YYYY")]);
+    else if(row.RECEIVER_PSEUDO == pseudo)
+      mTable.push(["Vente",row.DESCRIPTION,row.AMOUNT_RECEIVED + " €",row.SENDER_PSEUDO,row.COMMISSION + " €",mDate.format("Do MMMM YYYY")]);
+    else if(row.SENDER_PSEUDO == pseudo)
+      mTable.push(["Achat",row.DESCRIPTION,(0 - row.AMOUNT_RECEIVED) + " €",row.RECEIVER_PSEUDO,"0 €",mDate.format("Do MMMM YYYY")]);
+
+  });
+  console.log(mTable.toString());
+  var cont = false;
+  while (!cont) {
+  var confirm = u.promptSync([{
+    type:"confirm",
+    name:"do",
+    message:"Retour au menu principal ?"
+  }]);
+  if(confirm.do) {
+    cont = true;
+  }
+  }
+
 }
 
 var sign = function(){
