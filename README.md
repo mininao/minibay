@@ -3,6 +3,7 @@ Databases 101 Assignment
 
 ## Initilatisation de la bdd
 Les scripts à lancer (avec sqlplus par exemple) pour initialier la bdd sont dans l'ordre :
+
 1. init.sql
 2. user_logic.sql
 3. money_logic.sql
