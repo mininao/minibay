@@ -92,10 +92,10 @@ Create Or Replace Type user_profile as object (
 
 -- profile(Pseudo,Password)
 -- returns profile object
-CREATE OR REPLACE FUNCTION profile(upseudo IN VARCHAR2, upass IN VARCHAR2) RETURN user_profile AS
+CREATE OR REPLACE FUNCTION profile(upseudo IN VARCHAR2) RETURN user_profile AS
 uprofile user_profile;
 BEGIN
-  SELECT user_profile(USERS.pseudo, USERS.pass, USERS.last_name, USERS.first_name, USERS.address, USERS.email, USERS.phone, USERS.date_birth, USERS.zip, USERS.balance) INTO uprofile FROM USERS WHERE PSEUDO=upseudo AND PASS=upass;
+  SELECT user_profile(USERS.pseudo, USERS.pass, USERS.last_name, USERS.first_name, USERS.address, USERS.email, USERS.phone, USERS.date_birth, USERS.zip, USERS.balance) INTO uprofile FROM USERS WHERE PSEUDO=upseudo;
   RETURN uprofile;
   EXCEPTION
   WHEN no_data_found THEN
