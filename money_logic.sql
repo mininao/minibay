@@ -43,17 +43,41 @@ BEGIN
   RETURN 2;
 END;
 /
+drop type "CHABERTC"."MOUVEMENT_TAB" force;
+Create Or Replace Type money_mouvement as object (
+    description     VARCHAR2(1000),
+    date_mouvement  DATE  ,
+    amount_received NUMBER(19, 3),
+    amount_sent     NUMBER(19, 3)   ,
+    commission      NUMBER(19, 3),
+    deposit         NUMBER (1) ,
+    receiver_pseudo VARCHAR2 (25) ,
+    sender_pseudo   VARCHAR2 (25)
+);
+/
 
--- deposit(Pseudo,Password,Amout) NOT MANDATORY IN SPECS
--- returns 0 if successful
--- returns 1 if unknown error
---CREATE OR REPLACE FUNCTION deposit(upseudo IN VARCHAR2, upass IN VARCHAR2) RETURN INTEGER AS
---PRAGMA AUTONOMOUS_TRANSACTION;
---BEGIN
---  SELECT pseudo INTO useless FROM USERS WHERE PSEUDO=upseudo AND PASS=upass;
---  RETURN 0;
---  EXCEPTION
---  WHEN others THEN
---  RETURN 1;
---END;
---/
+create or replace type mouvement_tab as table of money_mouvement;
+/
+
+
+-- code partially from http://stackoverflow.com/questions/19208264/ora-22905-when-quering-a-table-type-with-a-select-statement
+CREATE OR REPLACE FUNCTION get_mouvements(upseudo IN VARCHAR2, upass IN VARCHAR2) RETURN mouvement_tab AS
+mtab mouvement_tab;
+BEGIN
+  If signin(upseudo,upass) != 0 Then
+    RETURN mtab;
+  End If;
+  
+  SELECT money_mouvement(MOUVEMENT.DESCRIPTION,MOUVEMENT.DATE_MOUVEMENT,MOUVEMENT.AMOUNT_RECEIVED,MOUVEMENT.AMOUNT_SENT,MOUVEMENT.COMMISSION,MOUVEMENT.DEPOSIT,MOUVEMENT.RECEIVER_PSEUDO,MOUVEMENT.SENDER_PSEUDO)
+  BULK COLLECT INTO mtab
+  FROM MOUVEMENT
+  WHERE MOUVEMENT.RECEIVER_PSEUDO = upseudo OR MOUVEMENT.SENDER_PSEUDO = upseudo;
+  
+  RETURN mtab;
+  EXCEPTION
+  WHEN OTHERS THEN
+  dbms_output.put_line(SQLCODE);
+  dbms_output.put_line(SQLERRM);
+  RETURN mtab;
+END;
+/

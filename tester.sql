@@ -173,3 +173,9 @@ BEGIN
   dbms_output.put_line(output);
 END;
 /
+
+BEGIN
+  dbms_output.put_line('2. Mouvements list test : should return the list of franciss mouvements');
+END;
+/
+SELECT * FROM table(chabertc.get_mouvements('francis','azerty'));
