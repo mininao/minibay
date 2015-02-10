@@ -1,5 +1,6 @@
 # minibay
 Databases 101 Assignment
+** DISCLAIMER : This was coded in under 6 hours without prior knowledge of PL/SQL. It is really unsecured and doesn't validate user input. It's bad. Really.**
 
 ## La partie SQL
 
