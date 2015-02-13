@@ -169,7 +169,16 @@ SELECT * FROM chabertc.liste_ventes;
   output INTEGER;
 BEGIN
   dbms_output.put_line('1. Transfer test: should return 0 | EXECUTE AS DBA');
-  SELECT chabertc.transfer('francis','estelle','description du transfert',500) INTO output FROM dual;
+  SELECT chabertc.transfer('estelle','francis','description du transfert',500) INTO output FROM dual;
+  dbms_output.put_line(output);
+END;
+/
+
+ DECLARE -- TEST TO BE TESTED AS DBA
+  output INTEGER;
+BEGIN
+  dbms_output.put_line('1. Transfer test: should return 0 | EXECUTE AS DBA');
+  SELECT chabertc.transfer('francis','estelle','description du transfert',1000) INTO output FROM dual;
   dbms_output.put_line(output);
 END;
 /
