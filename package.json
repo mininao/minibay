@@ -1,0 +1,27 @@
+{
+  "name": "minibay",
+  "version": "1.0.0",
+  "description": "DB 101 Assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mininao/minibay.git"
+  },
+  "author": "Maxence Aïci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mininao/minibay/issues"
+  },
+  "homepage": "https://github.com/mininao/minibay",
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "cli-table": "^0.3.1",
+    "inquirer": "^0.8.0",
+    "lodash": "^3.1.0",
+    "moment": "^2.9.0",
+    "synchronize": "^0.9.9"
+  }
+}
