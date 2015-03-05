@@ -87,19 +87,11 @@ DECLARE
   output user_profile;
 BEGIN
   dbms_output.put_line('4. Profile test: should return "francis et 79 Rue Francis  et 75002"');
-  SELECT chabertc.profile('francis','azerty') INTO output FROM dual;
+  SELECT chabertc.profile('francis') INTO output FROM dual;
   dbms_output.put_line(output.pseudo || ' et ' || output.address || '  et ' || output.zip);
 END;
 /
 
-DECLARE
-  output user_profile;
-BEGIN
-  dbms_output.put_line('4. Profile test: should return "  et  et  "');
-  SELECT chabertc.profile('francis','dddy') INTO output FROM dual;
-  dbms_output.put_line(output.pseudo || ' et ' || output.address || '  et ' || output.zip);
-END;
-/
 
  -- AUCTION_LOGIC.SQL TESTS
  -- 
