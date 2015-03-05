@@ -100,7 +100,7 @@ END;
   output INTEGER;
 BEGIN
   dbms_output.put_line('1. Propose Auction test: should return 0');
-  SELECT chabertc.propose_auction('francis','azerty','Bouteille de coca','Bouteille originale dessinée par picasso','15/6/2015',1000) INTO output FROM dual;
+  SELECT chabertc.propose_auction('francis','azerty','Bouteille de coca','Bouteille originale dessinée par picasso',to_date('15/6/2015','DD/MM/YYYY'),1000) INTO output FROM dual;
   dbms_output.put_line(output);
 END;
 /
