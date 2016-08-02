@@ -1,5 +1,6 @@
 # minibay
-Databases 101 Assignment
+Databases 101 Assignment  
+** DISCLAIMER : This was coded in under 6 hours without prior knowledge of PL/SQL. It is really unsecured and doesn't validate user input. It's bad. Really.**
 
 ## Initilatisation de la bdd
 Les scripts à lancer (avec sqlplus par exemple) pour initialier la bdd sont dans l'ordre :
